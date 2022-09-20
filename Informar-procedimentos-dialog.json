@@ -1,0 +1,183 @@
+{
+  "intents": [
+    {
+      "intent": "Terremoto",
+      "examples": [
+        {
+          "text": "desabamento"
+        },
+        {
+          "text": "Esta tendo tremores"
+        },
+        {
+          "text": "Houve uma rachadura perto daqui"
+        },
+        {
+          "text": "Tremores"
+        }
+      ],
+      "description": ""
+    },
+    {
+      "intent": "tsunami",
+      "examples": [
+        {
+          "text": "Erupção"
+        },
+        {
+          "text": "O mar esta muito agitado"
+        },
+        {
+          "text": "O mar esta recuando."
+        },
+        {
+          "text": "Tsunami"
+        },
+        {
+          "text": "Um vulcão esta com ameaça de erupção"
+        },
+        {
+          "text": "Vulcão"
+        }
+      ],
+      "description": ""
+    }
+  ],
+  "entities": [
+    {
+      "entity": "bombeiro",
+      "values": [
+        {
+          "type": "synonyms",
+          "value": "Emergência",
+          "synonyms": [
+            "ajuda"
+          ]
+        }
+      ],
+      "fuzzy_match": true
+    }
+  ],
+  "metadata": {
+    "api_version": {
+      "major_version": "v2",
+      "minor_version": "2018-11-08"
+    }
+  },
+  "dialog_nodes": [
+    {
+      "type": "standard",
+      "title": "Tsunami",
+      "output": {
+        "generic": [
+          {
+            "values": [
+              {
+                "text": "Vá ao lugar mais alto possivel"
+              },
+              {
+                "text": "Vá o mais longe possível do mar."
+              }
+            ],
+            "response_type": "text",
+            "selection_policy": "random"
+          }
+        ]
+      },
+      "conditions": "#tsunami",
+      "dialog_node": "Bem-vindo",
+      "previous_sibling": "node_4_1663596589072"
+    },
+    {
+      "type": "standard",
+      "title": "Em outros casos",
+      "output": {
+        "generic": [
+          {
+            "values": [
+              {
+                "text": "Eu não entendi. Explique com mais detalhes."
+              },
+              {
+                "text": "Você pode reformular sua afirmação? Eu não estou entendendo."
+              },
+              {
+                "text": "Eu não entendi o sentido."
+              }
+            ],
+            "response_type": "text",
+            "selection_policy": "sequential"
+          }
+        ]
+      },
+      "conditions": "anything_else",
+      "dialog_node": "Em outros casos",
+      "previous_sibling": "node_7_1663340663565",
+      "disambiguation_opt_out": true
+    },
+    {
+      "type": "standard",
+      "title": "Bombeiros",
+      "output": {
+        "generic": [
+          {
+            "values": [
+              {
+                "text": "O corpo de bombeiros esta sendo enviado."
+              }
+            ],
+            "response_type": "text",
+            "selection_policy": "random"
+          }
+        ]
+      },
+      "conditions": "@bombeiro:Emergência",
+      "dialog_node": "node_4_1663596589072"
+    },
+    {
+      "type": "standard",
+      "title": "Terremoto",
+      "output": {
+        "generic": [
+          {
+            "values": [
+              {
+                "text": "Se abaixe procure uma cobertura e aguarde."
+              },
+              {
+                "text": "Use um triangulo de sobrevivência."
+              }
+            ],
+            "response_type": "text",
+            "selection_policy": "random"
+          }
+        ]
+      },
+      "conditions": "#Terremoto",
+      "digress_in": "does_not_return",
+      "dialog_node": "node_7_1663340663565",
+      "previous_sibling": "Bem-vindo"
+    }
+  ],
+  "counterexamples": [],
+  "system_settings": {
+    "disambiguation": {
+      "prompt": "Você quis dizer:",
+      "enabled": true,
+      "randomize": true,
+      "max_suggestions": 5,
+      "suggestion_text_policy": "title",
+      "none_of_the_above_prompt": "Nenhuma das anteriores"
+    },
+    "human_agent_assist": {
+      "prompt": "Você quis dizer:"
+    },
+    "intent_classification": {
+      "training_backend_version": "v2"
+    }
+  },
+  "learning_opt_out": false,
+  "name": "Informar procedimentos",
+  "language": "pt-br",
+  "description": ""
+}
