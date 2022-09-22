@@ -1,0 +1,166 @@
+[
+    {
+        "id": "302c32c24af76b2b",
+        "type": "tab",
+        "label": "Flow 1",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "dfed3fe025c35058",
+        "type": "inject",
+        "z": "302c32c24af76b2b",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "2",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "Hello world!",
+        "payloadType": "str",
+        "x": 150,
+        "y": 120,
+        "wires": [
+            [
+                "6d719747cc1015f1"
+            ]
+        ]
+    },
+    {
+        "id": "e35bed78699ac0a4",
+        "type": "debug",
+        "z": "302c32c24af76b2b",
+        "name": "msg.payload",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 750,
+        "y": 320,
+        "wires": []
+    },
+    {
+        "id": "6d719747cc1015f1",
+        "type": "function",
+        "z": "302c32c24af76b2b",
+        "name": "Adicionar hora a mensagem",
+        "func": "var dateNow = new Date();\nvar timeAsString = dateNow.toLocaleTimeString();\n\nmsg.payload = msg.payload + \n                'a hora é' +\n                timeAsString + '.';\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 400,
+        "y": 240,
+        "wires": [
+            [
+                "e35bed78699ac0a4"
+            ]
+        ]
+    },
+    {
+        "id": "abe0faddd580e40b",
+        "type": "http in",
+        "z": "302c32c24af76b2b",
+        "name": "Entrada",
+        "url": "/conversa",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 50,
+        "y": 320,
+        "wires": [
+            [
+                "024d1d13f990f3b0"
+            ]
+        ]
+    },
+    {
+        "id": "024d1d13f990f3b0",
+        "type": "function",
+        "z": "302c32c24af76b2b",
+        "name": "prepara mensagem para envio",
+        "func": "msg.params = {\n    \"session_id\" :msg.payload.session_id !== 'undefined' ? msg.payload.session_id : \"\"\n};\nmsg.payload = msg.payload.mensagem;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 330,
+        "y": 340,
+        "wires": [
+            [
+                "a97ee366ac5941b0"
+            ]
+        ]
+    },
+    {
+        "id": "a97ee366ac5941b0",
+        "type": "watson-assistant-v2",
+        "z": "302c32c24af76b2b",
+        "name": "",
+        "service-endpoint": "",
+        "assistant_id": " b0ca32cb-4240-455b-b7e2-0c9adcfa37a5",
+        "debug": false,
+        "restart": false,
+        "return_context": true,
+        "alternate_intents": false,
+        "multisession": true,
+        "timeout": "",
+        "optout-learning": false,
+        "persist-session-id": false,
+        "x": 610,
+        "y": 380,
+        "wires": [
+            [
+                "63b27abe90ecb6f6"
+            ]
+        ]
+    },
+    {
+        "id": "63b27abe90ecb6f6",
+        "type": "function",
+        "z": "302c32c24af76b2b",
+        "name": "prepara retorno",
+        "func": "msg.payload = msg.payload.output.generic;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 840,
+        "y": 420,
+        "wires": [
+            [
+                "ed0987a9e3c633d0"
+            ]
+        ]
+    },
+    {
+        "id": "ed0987a9e3c633d0",
+        "type": "http response",
+        "z": "302c32c24af76b2b",
+        "name": "",
+        "statusCode": "",
+        "headers": {
+            "Acess-Control-Allow-Origin": "*"
+        },
+        "x": 790,
+        "y": 580,
+        "wires": []
+    }
+]
